@@ -14,7 +14,9 @@ app.use(express.json());
 
 // Request logging middleware
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`, req.body);
+  if (req.path !== '/register' && req.path !== '/signin') {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  }
   next();
 });
 
@@ -100,7 +102,6 @@ app.get("/", (req, res) => {
 app.post("/register", async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    console.log("Received registration request:", { username, email });
 
     // Validate required fields
     if (!username || !email || !password) {
@@ -132,7 +133,6 @@ app.post("/register", async (req, res) => {
 
     // Save user to database
     const savedUser = await newUser.save();
-    
 
     res.status(201).json({
       success: true,
@@ -145,7 +145,6 @@ app.post("/register", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Registration error:", error);
     res.status(500).json({
       success: false,
       message: "Error registering user",

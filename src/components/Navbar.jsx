@@ -27,9 +27,13 @@ export default function Navbar({ onMenuClick }) {
           <button className="btn-icon lg:hidden" onClick={onMenuClick} aria-label="Menu">
             {/* <i className="icon">☰</i> */}
           </button>
-          <Link to="/dashboard" className="navbar-brand">
-            <img src="/favicon.svg" alt="Finance Portal Logo" />
-            <span>Finance AI</span>
+          <Link to="/dashboard" className="navbar-brand flex items-center gap-2">
+            <img 
+              src="/finance-logo.svg" 
+              alt="Finance AI Logo" 
+              className="w-8 h-8"
+            />
+            <span className="text-lg font-semibold text-blue-600">Finance AI</span>
           </Link>
         </div>
 

@@ -49,10 +49,32 @@ export default function SignUp() {
             navigate('/signin');
           }, 2000);
         } else {
-          setError(response.data.message || 'Error creating account');
+          // Handle specific error messages from the server
+          setError(response.data.message);
         }
       } catch (err) {
-        setError(err.response?.data?.message || 'Error creating account');
+        // Handle different types of errors
+        if (err.response) {
+          // Server responded with an error
+          if (err.response.data.message) {
+            setError(err.response.data.message);
+          } else if (err.response.data.error) {
+            // Handle mongoose validation errors
+            if (err.response.data.error.includes('duplicate key error')) {
+              setError('An account with this email or username already exists');
+            } else {
+              setError(err.response.data.error);
+            }
+          } else {
+            setError('Registration failed. Please try again.');
+          }
+        } else if (err.request) {
+          // Request was made but no response received
+          setError('Unable to connect to the server. Please check your internet connection.');
+        } else {
+          // Something else went wrong
+          setError('An unexpected error occurred. Please try again.');
+        }
       }
     },
   });
